@@ -55,12 +55,12 @@ export default function ReportCard({ report, onClick }) {
         )}
         <span
           className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-            report.sentimen === 'Positif'
+            report.sentimen === 'Positif' || report.sentimen === 'positif'
               ? 'bg-emerald-50 text-emerald-700'
               : 'bg-amber-50 text-amber-800'
           }`}
         >
-          {report.sentimen === 'Positif' ? '😊 Positif' : '😠 Negatif'}
+          {report.sentimen === 'Positif' || report.sentimen === 'positif' ? '😊 Positif' : '😠 Negatif'}
         </span>
       </div>
 

@@ -121,7 +121,8 @@ export default function AdminPage() {
 
   const maxTrend = Math.max(...trend.map(t => t.count), 1);
   const totalUrgen = stats?.urgensi_breakdown?.[2] || 0;
-  const totalNegatif = stats?.sentimen_breakdown?.['Negatif'] || stats?.sentimen_breakdown?.['negatif'] || 0;
+  const rawSentimen = stats?.sentimen_breakdown || {};
+  const totalNegatif = (rawSentimen['Negatif'] || 0) + (rawSentimen['negatif'] || 0);
   const pctNegatif = stats?.total_laporan ? ((totalNegatif / stats.total_laporan) * 100).toFixed(0) : 0;
 
   if (loading) return <div className="pt-24"><LoadingSpinner message="Memuat admin panel..." /></div>;
