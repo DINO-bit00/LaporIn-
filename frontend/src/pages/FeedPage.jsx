@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { X, MapPin } from 'lucide-react';
 import { getLaporan } from '../services/api';
 import ReportCard from '../components/ReportCard';
 import CategoryChip from '../components/CategoryChip';
 import LoadingSpinner from '../components/LoadingSpinner';
+
+const URGENSI_LABELS = { 2: '🔴 Tinggi', 1: '🟡 Sedang', 0: '🟢 Rendah' };
 
 const CATEGORIES = ['Semua', 'Infrastruktur', 'Lingkungan', 'Kesehatan', 'Pendidikan', 'Keamanan', 'Administrasi'];
 
@@ -11,6 +14,7 @@ export default function FeedPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState('Semua');
+  const [selectedReport, setSelectedReport] = useState(null);
 
   useEffect(() => {
     fetchReports();
@@ -82,7 +86,7 @@ export default function FeedPage() {
         ) : (
           <div className="space-y-4 stagger-children">
             {reports.map((report) => (
-              <ReportCard key={report.id} report={report} />
+              <ReportCard key={report.id} report={report} onClick={() => setSelectedReport(report)} />
             ))}
           </div>
         )}
@@ -94,6 +98,53 @@ export default function FeedPage() {
           </p>
         )}
       </div>
+
+      {/* ===== DETAIL MODAL (Public) ===== */}
+      {selectedReport && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedReport(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <div className="sticky top-0 bg-white border-b border-slate-100 px-5 py-3 flex items-center justify-between rounded-t-2xl">
+              <h3 className="text-sm font-extrabold text-slate-900">Detail Laporan</h3>
+              <button onClick={() => setSelectedReport(null)} className="text-slate-400 hover:text-slate-600 transition-colors"><X size={18} /></button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-sm text-slate-800 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">{selectedReport.teks_asli}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Kategori</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1">{selectedReport.kategori || '-'}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Sentimen</p>
+                  <p className="text-xs font-bold mt-1">{selectedReport.sentimen === 'Positif' || selectedReport.sentimen === 'positif' ? '😊 Positif' : '😠 Negatif'}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Urgensi</p>
+                  <p className="text-xs font-bold mt-1">{URGENSI_LABELS[selectedReport.skor_urgensi] || '⚪'}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-100">
+                {selectedReport.lokasi && <div className="flex items-start gap-1"><MapPin size={14} className="text-slate-400 shrink-0" /> <span className="font-medium text-slate-700">{selectedReport.lokasi}</span></div>}
+                <div><span className="text-slate-400">📅 Tanggal:</span> <span className="font-medium text-slate-700 ml-1">{new Date(selectedReport.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
+              </div>
+
+              {selectedReport.catatan_admin && (
+                <div className="mt-4 pt-4 border-t border-slate-100">
+                  <label className="text-[10px] font-bold text-teal-600 uppercase tracking-wider mb-1.5 block">Tanggapan Admin</label>
+                  <p className="text-sm text-slate-700 bg-teal-50 border border-teal-100 p-3 rounded-xl italic">
+                    "{selectedReport.catatan_admin}"
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
