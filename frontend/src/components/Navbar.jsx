@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Send } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Send, Shield, LogOut } from 'lucide-react';
+import { isLoggedIn, logout } from '../services/auth';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,12 +19,22 @@ export default function Navbar() {
     setMenuOpen(false);
   }, [location]);
 
+  const navigate = useNavigate();
+  const loggedIn = isLoggedIn();
+
   const navLinks = [
     { to: '/', label: 'Beranda' },
     { to: '/lapor', label: 'Lapor' },
     { to: '/feed', label: 'Laporan' },
     { to: '/dashboard', label: 'Dashboard' },
+    ...(loggedIn ? [{ to: '/admin', label: 'Admin' }] : []),
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    window.location.reload();
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -87,6 +98,15 @@ export default function Navbar() {
               <Send size={14} />
               <span className="hidden sm:inline">Lapor</span>
             </Link>
+            {loggedIn ? (
+              <button onClick={handleLogout} className="hidden md:flex items-center gap-1 text-xs font-bold text-red-500 hover:text-red-600 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors">
+                <LogOut size={14} /> Keluar
+              </button>
+            ) : (
+              <Link to="/login" className="hidden md:flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-navy-700 px-2 py-1 rounded-lg hover:bg-slate-100 transition-colors">
+                <Shield size={14} /> Admin
+              </Link>
+            )}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
