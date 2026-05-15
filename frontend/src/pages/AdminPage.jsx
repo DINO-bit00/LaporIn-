@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ClipboardList, AlertTriangle, TrendingUp, Zap, Search, Download, ChevronLeft, ChevronRight, Trash2, Edit3, X, ArrowUpDown, MessageSquare } from 'lucide-react';
+import { ClipboardList, AlertTriangle, TrendingUp, Zap, Search, Download, ChevronLeft, ChevronRight, Trash2, Edit3, X, ArrowUpDown, MessageSquare, Inbox, Loader, CheckCircle2, XCircle } from 'lucide-react';
 import { getLaporan, getStats, getTrend, getKeywords, updateLaporan, deleteLaporan } from '../services/api';
 import { getToken } from '../services/auth';
 import StatCard from '../components/StatCard';
@@ -124,6 +124,7 @@ export default function AdminPage() {
   const rawSentimen = stats?.sentimen_breakdown || {};
   const totalNegatif = (rawSentimen['Negatif'] || 0) + (rawSentimen['negatif'] || 0);
   const pctNegatif = stats?.total_laporan ? ((totalNegatif / stats.total_laporan) * 100).toFixed(0) : 0;
+  const statusData = stats?.status_breakdown || {};
 
   if (loading) return <div className="pt-24"><LoadingSpinner message="Memuat admin panel..." /></div>;
 
@@ -146,6 +147,27 @@ export default function AdminPage() {
           <StatCard icon={<AlertTriangle size={20} className="text-red-500" />} value={totalUrgen} label="Urgen" trend="⚡ Prioritas" trendColor="text-red-500" />
           <StatCard icon={<TrendingUp size={20} className="text-amber-600" />} value={`${pctNegatif}%`} label="Negatif" trend={`${totalNegatif} dari ${stats?.total_laporan || 0}`} trendColor="text-amber-600" />
           <StatCard icon={<Zap size={20} className="text-teal-600" />} value="AI" label="IndoBERT" trend="Aktif" trendColor="text-teal-600" />
+        </div>
+
+        {/* Status Breakdown */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 mb-6 animate-fade-in-up">
+          <h3 className="text-sm font-bold text-slate-900 mb-3">📊 Status Penanganan</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: 'Baru', key: 'Baru', icon: <Inbox size={16} />, color: 'bg-blue-50 text-blue-600 border-blue-100', iconBg: 'bg-blue-100' },
+              { label: 'Diproses', key: 'Diproses', icon: <Loader size={16} />, color: 'bg-amber-50 text-amber-600 border-amber-100', iconBg: 'bg-amber-100' },
+              { label: 'Selesai', key: 'Selesai', icon: <CheckCircle2 size={16} />, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', iconBg: 'bg-emerald-100' },
+              { label: 'Ditolak', key: 'Ditolak', icon: <XCircle size={16} />, color: 'bg-red-50 text-red-600 border-red-100', iconBg: 'bg-red-100' },
+            ].map(({ label, key, icon, color, iconBg }) => (
+              <div key={key} className={`flex items-center gap-3 p-3 rounded-xl border transition-transform hover:-translate-y-0.5 ${color}`}>
+                <div className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center shrink-0`}>{icon}</div>
+                <div>
+                  <p className="text-lg font-black leading-tight">{statusData[key] || 0}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider opacity-75">{label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Trend + Keywords Row */}

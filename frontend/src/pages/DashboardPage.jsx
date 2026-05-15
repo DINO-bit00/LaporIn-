@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ClipboardList, AlertTriangle, CheckCircle, Zap, TrendingUp, Clock } from 'lucide-react';
+import { ClipboardList, AlertTriangle, CheckCircle, Zap, TrendingUp, Clock, Inbox, Loader, CheckCircle2, XCircle } from 'lucide-react';
 import { getStats, getLaporan } from '../services/api';
 import StatCard from '../components/StatCard';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -78,6 +78,8 @@ export default function DashboardPage() {
   const totalLaporan = stats?.total_laporan || 0;
   const pctNegatif = totalLaporan ? ((totalNegatif / totalLaporan) * 100).toFixed(0) : 0;
   const pctPositif = totalLaporan ? ((totalPositif / totalLaporan) * 100).toFixed(0) : 0;
+
+  const statusData = stats?.status_breakdown || {};
 
   return (
     <div className="min-h-screen bg-slate-50 pt-24 pb-16">
@@ -211,6 +213,25 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Status Penanganan */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8 animate-fade-in-up hover:shadow-md transition-shadow" style={{ animationDelay: '0.25s' }}>
+          <h3 className="text-sm font-extrabold text-slate-900 mb-4">Status Penanganan Laporan</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: 'Baru', key: 'Baru', icon: <Inbox size={18} />, color: 'bg-blue-50 text-blue-600 border-blue-100', iconBg: 'bg-blue-100' },
+              { label: 'Diproses', key: 'Diproses', icon: <Loader size={18} />, color: 'bg-amber-50 text-amber-600 border-amber-100', iconBg: 'bg-amber-100' },
+              { label: 'Selesai', key: 'Selesai', icon: <CheckCircle2 size={18} />, color: 'bg-emerald-50 text-emerald-600 border-emerald-100', iconBg: 'bg-emerald-100' },
+              { label: 'Ditolak', key: 'Ditolak', icon: <XCircle size={18} />, color: 'bg-red-50 text-red-600 border-red-100', iconBg: 'bg-red-100' },
+            ].map(({ label, key, icon, color, iconBg }) => (
+              <div key={key} className={`text-center p-4 rounded-xl border transition-transform hover:-translate-y-1 ${color}`}>
+                <div className={`w-9 h-9 rounded-full ${iconBg} flex items-center justify-center mx-auto mb-2`}>{icon}</div>
+                <p className="text-2xl font-black">{statusData[key] || 0}</p>
+                <p className="text-[10px] font-bold mt-1 uppercase tracking-wider">{label}</p>
+              </div>
+            ))}
           </div>
         </div>
 
