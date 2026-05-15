@@ -7,6 +7,13 @@ const URGENCY_CONFIG = {
   0: { label: '✅ Rendah', cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
 };
 
+const STATUS_CONFIG = {
+  'Baru':     { label: '📥 Baru',     cls: 'bg-blue-50 text-blue-700 border border-blue-200' },
+  'Diproses': { label: '⏳ Diproses', cls: 'bg-amber-50 text-amber-700 border border-amber-200' },
+  'Selesai':  { label: '✅ Selesai',  cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+  'Ditolak':  { label: '❌ Ditolak',  cls: 'bg-red-50 text-red-600 border border-red-200' },
+};
+
 function timeAgo(dateStr) {
   const now = new Date();
   const date = new Date(dateStr);
@@ -30,7 +37,12 @@ export default function ReportCard({ report, onClick }) {
       {/* Head */}
       <div className="flex justify-between items-start gap-3 mb-3">
         <div className="flex flex-col gap-1.5">
-          <CategoryChip kategori={report.kategori} />
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <CategoryChip kategori={report.kategori} />
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${(STATUS_CONFIG[report.status] || STATUS_CONFIG['Baru']).cls}`}>
+              {(STATUS_CONFIG[report.status] || STATUS_CONFIG['Baru']).label}
+            </span>
+          </div>
           <span className="text-xs text-slate-400 font-medium">
             ⏱ {timeAgo(report.tanggal)}
           </span>

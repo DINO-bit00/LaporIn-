@@ -6,6 +6,14 @@ import CategoryChip from '../components/CategoryChip';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const URGENSI_LABELS = { 2: '🔴 Tinggi', 1: '🟡 Sedang', 0: '🟢 Rendah' };
+const STATUS_LABELS = {
+  'Baru': '📥 Baru', 'Diproses': '⏳ Diproses',
+  'Selesai': '✅ Selesai', 'Ditolak': '❌ Ditolak',
+};
+const STATUS_COLORS = {
+  'Baru': 'text-blue-700', 'Diproses': 'text-amber-700',
+  'Selesai': 'text-emerald-700', 'Ditolak': 'text-red-600',
+};
 
 const CATEGORIES = ['Semua', 'Infrastruktur', 'Lingkungan', 'Kesehatan', 'Pendidikan', 'Keamanan', 'Administrasi'];
 
@@ -113,7 +121,7 @@ export default function FeedPage() {
                 <p className="text-sm text-slate-800 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">{selectedReport.teks_asli}</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Kategori</p>
                   <p className="text-xs font-bold text-slate-800 mt-1">{selectedReport.kategori || '-'}</p>
@@ -125,6 +133,10 @@ export default function FeedPage() {
                 <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Urgensi</p>
                   <p className="text-xs font-bold mt-1">{URGENSI_LABELS[selectedReport.skor_urgensi] || '⚪'}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Status</p>
+                  <p className={`text-xs font-bold mt-1 ${STATUS_COLORS[selectedReport.status] || 'text-blue-700'}`}>{STATUS_LABELS[selectedReport.status] || '📥 Baru'}</p>
                 </div>
               </div>
 
