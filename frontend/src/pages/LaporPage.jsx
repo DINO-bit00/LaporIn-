@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MapPin, Send, CheckCircle, Sparkles, Loader2 } from 'lucide-react';
 import { submitLaporan } from '../services/api';
 
-const MAX_CHARS = 1000;
+const MAX_CHARS = 2500;
 
 export default function LaporPage() {
   const [form, setForm] = useState({ nama: '', lokasi: '', teks: '' });
