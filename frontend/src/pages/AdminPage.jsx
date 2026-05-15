@@ -24,7 +24,7 @@ export default function AdminPage() {
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 1 });
 
   // Filter state
-  const [filters, setFilters] = useState({ kategori: 'all', sentimen: 'all', status: 'all', search: '' });
+  const [filters, setFilters] = useState({ kategori: 'all', sentimen: 'all', status: 'all', urgensi: 'all', search: '' });
   const [sortBy, setSortBy] = useState('tanggal');
   const [order, setOrder] = useState('desc');
 
@@ -143,8 +143,8 @@ export default function AdminPage() {
 
         {/* Stat Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 stagger-children">
-          <StatCard icon={<ClipboardList size={20} className="text-navy-700" />} value={stats?.total_laporan?.toLocaleString('id-ID') || '0'} label="Total Laporan" trend="↑ terbaru" highlight />
-          <StatCard icon={<AlertTriangle size={20} className="text-red-500" />} value={totalUrgen} label="Urgen" trend="⚡ Prioritas" trendColor="text-red-500" />
+          <StatCard icon={<ClipboardList size={20} className="text-navy-700" />} value={stats?.total_laporan?.toLocaleString('id-ID') || '0'} label="Total Laporan" trend="↑ terbaru" highlight onClick={() => { setFilters(f => ({ ...f, urgensi: 'all' })); setPagination(p => ({ ...p, page: 1 })); }} />
+          <StatCard icon={<AlertTriangle size={20} className="text-red-500" />} value={totalUrgen} label="Urgen" trend="⚡ Tingkat Urgensi Tinggi" trendColor="text-red-500" onClick={() => { setFilters(f => ({ ...f, urgensi: f.urgensi === '2' ? 'all' : '2' })); setPagination(p => ({ ...p, page: 1 })); }} active={filters.urgensi === '2'} />
           <StatCard icon={<TrendingUp size={20} className="text-amber-600" />} value={`${pctNegatif}%`} label="Negatif" trend={`${totalNegatif} dari ${stats?.total_laporan || 0}`} trendColor="text-amber-600" />
           <StatCard icon={<Zap size={20} className="text-teal-600" />} value="AI" label="IndoBERT" trend="Aktif" trendColor="text-teal-600" />
         </div>
@@ -226,6 +226,13 @@ export default function AdminPage() {
                 className="text-xs border border-slate-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500/30">
                 <option value="all">📋 Semua Status</option>
                 {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+              <select value={filters.urgensi} onChange={(e) => { setFilters(f => ({ ...f, urgensi: e.target.value })); setPagination(p => ({ ...p, page: 1 })); }}
+                className={`text-xs border rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${filters.urgensi !== 'all' ? 'border-red-300 bg-red-50 text-red-700 font-bold' : 'border-slate-200'}`}>
+                <option value="all">🎯 Semua Urgensi</option>
+                <option value="2">🔴 Tinggi</option>
+                <option value="1">🟡 Sedang</option>
+                <option value="0">🟢 Rendah</option>
               </select>
               <button onClick={handleExport} className="flex items-center gap-1 text-xs font-bold text-navy-700 bg-navy-50 hover:bg-navy-100 px-3 py-2 rounded-lg transition-colors">
                 <Download size={14} /> Export CSV

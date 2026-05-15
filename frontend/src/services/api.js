@@ -25,6 +25,7 @@ export const getLaporan = async (filters = {}) => {
   if (filters.kategori && filters.kategori !== 'all') params.append('kategori', filters.kategori);
   if (filters.sentimen && filters.sentimen !== 'all') params.append('sentimen', filters.sentimen);
   if (filters.status && filters.status !== 'all') params.append('status', filters.status);
+  if (filters.urgensi !== undefined && filters.urgensi !== '' && filters.urgensi !== 'all') params.append('urgensi', filters.urgensi);
   if (filters.search) params.append('search', filters.search);
   if (filters.page) params.append('page', filters.page);
   if (filters.limit) params.append('limit', filters.limit);
