@@ -124,7 +124,7 @@ export default function DashboardPage() {
             icon={<Zap size={20} className="text-teal-600" />}
             value="Aktif"
             label="Analisis AI"
-            trend="IndoBERT NLP"
+            trend="LSTM"
             trendColor="text-teal-600"
           />
         </div>

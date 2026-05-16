@@ -146,7 +146,7 @@ export default function AdminPage() {
           <StatCard icon={<ClipboardList size={20} className="text-navy-700" />} value={stats?.total_laporan?.toLocaleString('id-ID') || '0'} label="Total Laporan" trend="↑ terbaru" highlight onClick={() => { setFilters(f => ({ ...f, urgensi: 'all' })); setPagination(p => ({ ...p, page: 1 })); }} />
           <StatCard icon={<AlertTriangle size={20} className="text-red-500" />} value={totalUrgen} label="Urgen" trend="⚡ Tingkat Urgensi Tinggi" trendColor="text-red-500" onClick={() => { setFilters(f => ({ ...f, urgensi: f.urgensi === '2' ? 'all' : '2' })); setPagination(p => ({ ...p, page: 1 })); }} active={filters.urgensi === '2'} />
           <StatCard icon={<TrendingUp size={20} className="text-amber-600" />} value={`${pctNegatif}%`} label="Negatif" trend={`${totalNegatif} dari ${stats?.total_laporan || 0}`} trendColor="text-amber-600" />
-          <StatCard icon={<Zap size={20} className="text-teal-600" />} value="AI" label="IndoBERT" trend="Aktif" trendColor="text-teal-600" />
+          <StatCard icon={<Zap size={20} className="text-teal-600" />} value="AI" label="LSTM" trend="Aktif" trendColor="text-teal-600" />
         </div>
 
         {/* Status Breakdown */}

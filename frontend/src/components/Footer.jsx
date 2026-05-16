@@ -40,13 +40,13 @@ export default function Footer() {
                 <Link to="/" className="text-sm hover:text-teal-400 transition-colors">Beranda</Link>
                 <Link to="/lapor" className="text-sm hover:text-teal-400 transition-colors">Buat Laporan</Link>
                 <Link to="/feed" className="text-sm hover:text-teal-400 transition-colors">Feed Laporan</Link>
+                <Link to="/dashboard" className="text-sm hover:text-teal-400 transition-colors">Dashboard</Link>
               </div>
             </div>
             <div>
               <h4 className="text-xs font-bold text-white/40 uppercase tracking-wider mb-3">Admin</h4>
               <div className="flex flex-col gap-2">
-                <Link to="/dashboard" className="text-sm hover:text-teal-400 transition-colors">Dashboard</Link>
-                <a href="#" className="text-sm hover:text-teal-400 transition-colors">API Docs</a>
+                <Link to="/admin" className="text-sm hover:text-teal-400 transition-colors">Admin Panel</Link>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-6 text-center">
           <p className="text-xs text-white/30">
-            © 2026 LaporIn · CC26-PSU225 · Coding Camp powered by DBS Foundation · Dibuat dengan ❤️ untuk Indonesia
+            © 2026 LaporIn · CC26-PSU225 · Coding Camp powered by DBS Foundation · Indonesia
           </p>
         </div>
       </div>
